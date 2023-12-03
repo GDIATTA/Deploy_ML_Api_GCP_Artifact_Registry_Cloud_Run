@@ -27,3 +27,12 @@ jobs:
         gcloud auth configure-docker europe-west9-docker.pkg.dev
         docker build -t europe-west9-docker.pkg.dev/$GOOGLE_PROJECT/test1/test1:test_ml_image .
         docker push europe-west9-docker.pkg.dev/$GOOGLE_PROJECT/test1/test1:test_ml_image
+    - name: Deploy
+      env:
+        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+        run: |-
+          gcloud run deploy test1 \
+          --region europe-west9 \
+          --image gcr.io/$GOOGLE_PROJECT/tes1:test_ml_image \
+          --platform "managed" \
+          --quiet
